@@ -35,3 +35,10 @@ first `;` on a chunk-size line is ignored, as RFC 7230 requires. Trailer fields
 are also skipped, so the returned bytes never include trailer content. The
 returned value is always a fresh `Uint8Array`; if you need a `Buffer`, wrap it
 with `Buffer.from(result)`.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
